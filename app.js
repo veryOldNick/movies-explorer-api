@@ -11,9 +11,7 @@ const { PORT = 3000 } = process.env;
 mongoose.connect('mongodb://127.0.0.1:27017/moviesdb').then(() => {
   console.log('connected to db');
 });
-// mongoose.connect('mongodb://127.0.0.1:27017/mestodb').then(() => {
-//   console.log('connected to db');
-// });
+
 
 // // app.use((req, res, next) => {
 // //   req.user = {
