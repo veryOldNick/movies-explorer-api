@@ -1,44 +1,43 @@
+const mongoose = require('mongoose');
+
 const User = require('../models/users');
+const BadRequestError = require('../errors/bad-request-error'); // 400
+const NotFoundError = require('../errors/page-not-found-error'); // 404
 
-const createUser = (req, res) => {
-  const {name, email, password} = req.body;
-  User.create({name, email, password})
-    .then((user) => res.status(201).send({ data: user }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: err.message });
-      } else {
-        res.status(500).send({ message: 'Ошибка сервера' });
-      }
-    });
+
+const getUserInfo = (req, res, next) => {
+  const { _id } = req.user;
+  User.findById(_id)
+  .then((user) => {
+    if (!user) {
+      throw new NotFoundError('Пользователь с таким id не найден');
+    }
+    res.status(200).send({ data: user });
+  })
+  .catch((err) => {
+    if (err instanceof mongoose.Error.CastError) {
+      return next(new BadRequestError('Некорректный  id'));
+    }
+    return next(err);
+  });
 };
 
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => {res.status(200).send(users)})
-    .catch((err) => res.status(500).send({message: err.message}));
-};
+const updateProfile = (req, res, next) => {
+  const { _id } = req.user;
+  const { name, email } = req.body;
 
-const getUserById = (req, res) => {
-  const { userId } = req.params;
-  User.findById(userId)
+  User.findByIdAndUpdate(_id, { name, email }, { new: true, runValidators: true })
     .orFail()
-    .then((user) => {
-      res.send(user);
-    })
+    .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Некорректный  id' });
-      } else if (err.name === 'DocumentNotFoundError') {
-        res.status(404).send({ message: 'Пользователь с таким id не найден' });
-      } else {
-        res.status(500).send({ message: 'Ошибка сервера' });
+      if (err instanceof mongoose.Error.ValidationError) {
+        return next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
       }
+      return next(err);
     });
 };
 
 module.exports = {
-  createUser,
-  getUsers,
-  getUserById,
+  getUserInfo,
+  updateProfile,
 };

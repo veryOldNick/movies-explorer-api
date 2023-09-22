@@ -13,6 +13,14 @@ mongoose.connect('mongodb://127.0.0.1:27017/moviesdb').then(() => {
   console.log('connected to db');
 });
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: '650714714b8ae7d573db4bbb',
+  };
+  next();
+});
+
+
 app.use(router);
 
 app.listen(PORT, () => {
