@@ -6,7 +6,7 @@ const {
   createCard,
   getCards,
   deleteCard,
-} = require('../controllers/cards');
+} = require('../controllers/movies');
 
 // создаёт карточку
 router.post('/', createCard);

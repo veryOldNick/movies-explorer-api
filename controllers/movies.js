@@ -10,7 +10,7 @@ const createCard = (req, res, next) => {
     trailerLink, thumbnail, movieId, nameRU, nameEN } = req.body;
   const owner = req.user._id;
   Card.create({ country, director, duration, year, description, image,
-    trailerLink, thumbnail, movieId, nameRU, nameEN, })
+    trailerLink, thumbnail, movieId, nameRU, nameEN, owner})
     .then((card) => res.status(201).send(card))
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {
