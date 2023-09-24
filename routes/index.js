@@ -2,8 +2,13 @@ const router = require('express').Router();
 // const { celebrate, Joi } = require('celebrate');
 // const regUrl = require('../utils/constants');
 // const auth = require('../middlewares/auth');
-// const { createUser, login } = require('../controllers/users');
+const { createUser, login } = require('../controllers/users');
 const NotFoundError = require('../errors/page-not-found-error'); // 404
+
+router.post('/signin', login);
+
+router.post('/signup', createUser);
+
 
 router.use('/users', require('./users'));
 
