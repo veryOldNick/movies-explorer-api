@@ -1,10 +1,9 @@
 const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = process.env;
 const UnAuthorizedError = require('../errors/unauthorized-error'); // 401
 
 const auth = (req, res, next) => {
   const { authorization } = req.headers;
-
-  console.log(authorization);
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
     return next(new UnAuthorizedError('Необходима авторизаци'));
@@ -14,7 +13,7 @@ const auth = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(token, 'bla bla bla');
+    payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
     return next(new UnAuthorizedError('Необходима авторизаци'));
   }
