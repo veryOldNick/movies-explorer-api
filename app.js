@@ -6,18 +6,17 @@ const bodyParser = require('body-parser');
 const router = require('./routes/index');
 const errorWithoutStatus = require('./errors/error-without-status');
 const { errors } = require('celebrate');
-const { JWT_SECRET } = process.env;
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-
+const { PORT, MONGO_URL } = require("./utils/config");
+const limiter = require('./middlewares/limiter');
+const helmet = require('helmet');
 
 const app = express();
 app.use(bodyParser.json());
+app.use(helmet());
+app.use(limiter);
 
-const { PORT = 3000 } = process.env;
-
-mongoose.connect('mongodb://127.0.0.1:27017/moviesdb').then(() => {
-  console.log('connected to db');
-});
+mongoose.connect(MONGO_URL).then(() => {console.log('connected to db')});
 
 app.use(requestLogger);
 

@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, NODE_ENV } = require("../utils/config");
 
 const User = require('../models/users');
 const BadRequestError = require('../errors/bad-request-error'); // 400
 const NotFoundError = require('../errors/page-not-found-error'); // 404
 const ConflictError = require('../errors/conflict-error'); // 409
+
 
 const createUser = (req, res, next) => {
   const { name, email, password, } = req.body;
@@ -33,7 +34,11 @@ const login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === "production" ? JWT_SECRET : "bla bla bla",
+        { expiresIn: '7d' }
+      );
       res.status(200).send({ token });
     })
     .catch(next);
