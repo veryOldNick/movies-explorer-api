@@ -10,8 +10,10 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT, MONGO_URL } = require("./utils/config");
 const limiter = require('./middlewares/limiter');
 const helmet = require('helmet');
+const { corsMid } = require('./middlewares/cors');
 
 const app = express();
+app.use(corsMid);
 app.use(bodyParser.json());
 app.use(helmet());
 app.use(limiter);

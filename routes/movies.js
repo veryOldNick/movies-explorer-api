@@ -30,11 +30,13 @@ router.post('/', celebrate({
 router.get('/', getCards);
 
 // удаляет карточку по идентификатору
-router.delete('/:cardId', celebrate({
+// router.delete('/:cardId', celebrate({
+  router.delete("/:_id", celebrate({
   params: Joi.object().keys({
     _id: Joi.string().required().hex().length(24),
   }),
 }),deleteCard);
+
 
 
 module.exports = router;
