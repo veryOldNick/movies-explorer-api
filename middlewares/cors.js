@@ -3,7 +3,11 @@ const allowedCors = [
   'http://localhost:3001',
   'http://127.0.0.1:3000',
   'http://127.0.0.1:3001',
-];
+  'http://movie.nomoredomainsrocks.ru',
+  'http://api.movie.nomoredomainsrocks.ru',
+  'movie.nomoredomainsrocks.ru',
+  'api.movie.nomoredomainsrocks.ru',
+  ];
 
 const corsMid = (req, res, next) => {
   const { origin } = req.headers;
