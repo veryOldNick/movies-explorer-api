@@ -7,6 +7,8 @@ const allowedCors = [
   'http://api.movie.nomoredomainsrocks.ru',
   'movie.nomoredomainsrocks.ru',
   'api.movie.nomoredomainsrocks.ru',
+  'https://movie.nomoredomainsrocks.ru',
+  'https://api.movie.nomoredomainsrocks.ru',
   ];
 
 const corsMid = (req, res, next) => {
